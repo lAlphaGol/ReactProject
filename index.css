@@ -1,0 +1,68 @@
+/*
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+.mapstyle
+{
+  width:100vw;
+  height: 100vh;
+}
+*/
+
+html {
+  font-size: 14px;
+}
+body {
+  margin: 0;
+  font-family: "Open Sans", sans-serif;
+  line-height: 1;/*行间距*/
+}
+.Root {
+  height: 100vh;
+}
+.Tabs {
+  height: 100vh;
+  display: flex;
+}
+.TabList {
+  margin: 0;
+  width: 10vw;
+  background: #263238;
+}
+.TabPanel {
+  flex: 1;
+  display: none;
+  padding: 0rem 0rem;
+}
+.TabPanel.is-active {
+  display: block;
+}
+.Button {
+  display: inline-block;
+  width: 100%;
+  padding: 1rem 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+}
+.Button:focus,
+.Button:hover {
+  outline: 0;
+  background: #37474F;
+}
+.Tab.is-active .Button {
+  background: #0091EA;
+}
