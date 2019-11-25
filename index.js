@@ -52,19 +52,22 @@ class Getdata0 extends React.Component{
         this.state={
             mydatas:[
                 {
-                Code:null,
-                ID:null,
-                Name:null,
-                Location:null,
-                Cordinate_X:null,
-                Cordinate_Y:null
+                    No:null,
+                    TypeID:null,
+                    ObjectID:null,
+                    Name:null,
+                    Longitude:null,
+                    Latitude:null,
+                    CreateTime:null,
+                    Location:null,
+                    Remark:null,
+                    Modify_Record:null,
             }],
             mysigns:[
-                //{position:
                 {
                     longitude:null,
                     latitude:null
-                }//}
+                }
             ]
         }
     }
@@ -73,11 +76,9 @@ class Getdata0 extends React.Component{
         console.log(this.state);
     }
     fetchData=()=>{
-        //https://cricketsbrother.github.io/map.json
-        //http://192.168.43.182:3000/api/GuidePama/570
-        //https://cricketsbrother.github.io/test2.json
+        //https://cricketsbrother.github.io/new.json
         //https://cricketsbrother.github.io/fk.json
-        fetch('https://cricketsbrother.github.io/fk.json',{method:"GET"})
+        fetch('http://2738y998r4.wicp.vip:10557/TrafficSign_API/SignBase',{method:"GET"})
         .then(response=>{return response.json()})
         .then(
             (res)=>{
@@ -107,7 +108,7 @@ class Getdata0 extends React.Component{
                 center={[103.984111056,30.76196695635]}//设置初始中心坐标
                 >
             
-            {mydatas.map(mydata=>(<Marker position={[mydata.Cordinate_X,mydata.Cordinate_Y]}/>))}
+            {mydatas.map(mydata=>(<Marker position={[mydata.Longitude,mydata.Latitude]}/>))}
 
             </Map>
         )
@@ -117,24 +118,108 @@ class Getdata0 extends React.Component{
 class Addvalue extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {value: 'straight'};
+      this.state = {
+            value: 'straight',
+            No:null,
+            TypeID:null,
+            ObjectID:null,
+            Name:null,
+            Longitude:null,
+            Latitude:null,
+            CreateTime:null,
+            Location:null,
+            Remark:null,
+            Modify_Record:null,
+        };
    
       this.handleChange = this.handleChange.bind(this);
+      this.handleChange1 = this.handleChange1.bind(this);
+      this.handleChange2 = this.handleChange2.bind(this);
+      this.handleChange3 = this.handleChange3.bind(this);
+      this.handleChange4 = this.handleChange4.bind(this);
+      this.handleChange5 = this.handleChange5.bind(this);
+      this.handleChange6 = this.handleChange6.bind(this);
+      this.handleChange7 = this.handleChange7.bind(this);
+      this.handleChange8 = this.handleChange8.bind(this);
+      this.handleChange9 = this.handleChange9.bind(this);
+      this.handleChange10 = this.handleChange10.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      //this.handleChangeButton = this.handleChangeButton.bind(this);
     }
    
     handleChange(event) {
       this.setState({value: event.target.value});
     }
+    handleChange1(event) {
+        this.setState({No: event.target.value});
+    }
+    handleChange2(event) {
+        this.setState({TypeID: event.target.value});
+      }
+      handleChange3(event) {
+          this.setState({ObjectID: event.target.value});
+      }
+      handleChange4(event) {
+        this.setState({Name: event.target.value});
+      }
+      handleChange5(event) {
+          this.setState({Longitude: event.target.value});
+      }
+      handleChange6(event) {
+        this.setState({Latitude: event.target.value});
+      }
+      handleChange7(event) {
+          this.setState({CreateTime: event.target.value});
+      }
+      handleChange8(event) {
+        this.setState({Location: event.target.value});
+      }
+      handleChange9(event) {
+          this.setState({Remark: event.target.value});
+      }
+      handleChange10(event) {
+        this.setState({Modify_Record: event.target.value});
+      }
     handleSubmit(event) {
-      alert('You have upload the information: ' + this.state.value);
-      event.preventDefault();
+        //this.setState.CreateTime=new Date();
+        //this.setState.Modify_Record=new Date();
+      console.log('You have upload the information:\n ' + 
+      'value: '+this.state.value+
+      '\nNo: '+this.state.No+
+      '\nTypeID: '+this.state.TypeID+
+      '\nObjectID: '+this.state.ObjectID+
+      '\nName: '+this.state.Name+
+      '\nLongitude: '+this.state.Longitude+
+      '\nLatitude: '+this.state.Latitude+
+      '\nCreateTime: '+this.state.CreateTime+
+      '\nLocation: '+this.state.Location+
+      '\nRemark: '+this.state.Remark+
+      '\nModify_Record: '+this.state.Modify_Record
+      );
+      this.postData();
     }
     /*
+    handleChangeButton(event)
+    {
+        this.setState({
+            No:null,
+            TypeID:null,
+            ObjectID:null,
+            Name:null,
+            Longitude:null,
+            Latitude:null,
+            CreateTime:null,
+            Location:null,
+            Remark:null,
+            Modify_Record:null,
+        });
+    }*/
+    /*
     componentDidMount(){
-        this.fetchData();
+        this.postData();
         console.log(this.state);
     }
+    
     fetchData=()=>{
         let url = ".................................";//接口地址
         let formData = new FormData();
@@ -157,19 +242,95 @@ class Addvalue extends React.Component {
             
     }*/
     
+    postData = ()=> {
+        //
+        let url = "http://2738y998r4.wicp.vip:10557/TrafficSign_API/SignBase";//接口地址
+        fetch(url, 
+        {
+		   method: "POST",
+		   mode: "cors",
+           headers: 
+           {
+		    	"Content-Type": "application/x-www-form-urlencoded"
+		   },
+           body:'value='+this.state.value+
+           '&No='+this.state.No+
+           '&TypeID='+this.state.TypeID+
+           '&ObjectID='+this.state.ObjectID+
+           '&Name='+this.state.Name+
+           '&Longitude='+this.state.Longitude+
+           '&Latitude='+this.state.Latitude+
+           '&CreateTime='+this.state.CreateTime+
+           '&Location='+this.state.Location+
+           '&Remark='+this.state.Remark+
+           '&Modify_Record='+this.state.Modify_Record
+	  }).then(response=>response.json())
+	    .catch((error)=> {
+	          console.error(error);
+	    });
+    alert('You have uploaded the information:\n ' + 
+      'value: '+this.state.value+
+      '\nNo: '+this.state.No+
+      '\nTypeID: '+this.state.TypeID+
+      '\nObjectID: '+this.state.ObjectID+
+      '\nName: '+this.state.Name+
+      '\nLongitude: '+this.state.Longitude+
+      '\nLatitude: '+this.state.Latitude+
+      '\nCreateTime: '+this.state.CreateTime+
+      '\nLocation: '+this.state.Location+
+      '\nRemark: '+this.state.Remark+
+      '\nModify_Record: '+this.state.Modify_Record
+      );
+	}
+
     render() {
       return (
+          <div>
         <form onSubmit={this.handleSubmit}>
           <label>
             选择您需要添加的标志类型
+            <br />
             <select value={this.state.value} onChange={this.handleChange}>
               <option value="tl">左转</option>
               <option value="tr">右转</option>
               <option value="straight">直行</option>
             </select>
+            <br />
+            <br />
+            No:<input type="text" value={this.state.No} onChange={this.handleChange1} /> 
+            <br />
+            <br />
+            TypeID:<input type="text" value={this.state.TypeID} onChange={this.handleChange2} /> 
+            <br />
+            <br />
+            ObjectID:<input type="text" value={this.state.ObjectID} onChange={this.handleChange3} /> 
+            <br />
+            <br />
+            Name:<input type="text" value={this.state.Name} onChange={this.handleChange4} /> 
+            <br />
+            <br />
+            Longitude:<input type="text" value={this.state.Longitude} onChange={this.handleChange5} /> 
+            <br />
+            <br />
+            Latitude:<input type="text" value={this.state.Latitude} onChange={this.handleChange6} /> 
+            <br />
+            <br />
+            CreateTime:<input type="text" value={this.state.CreateTime} onChange={this.handleChange7} /> 
+            <br />
+            <br />
+            Location:<input type="text" value={this.state.Location} onChange={this.handleChange8} /> 
+            <br />
+            <br />
+            Remark:<input type="text" value={this.state.Remark} onChange={this.handleChange9} /> 
+            <br />
+            <br />
+            Modify_Record:<input type="text" value={this.state.Modify_Record} onChange={this.handleChange10} /> 
+            <br />
+            <br />
           </label>
           <input type="submit" value="确定增加" />
         </form>
+        </div>
       );
     }
   }
@@ -178,24 +339,22 @@ class Addvalue extends React.Component {
 class Deletevalue extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {value: null};
-        this.handleChangeButton = this.handleChangeButton.bind(this);
-        this.handleChangeInput=this.handleChangeInput.bind(this);
+        this.state = {
+            ObjectID:null,
+        };
+        //this.handleChangeButton = this.handleChangeButton.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeInput1=this.handleChangeInput1.bind(this);
     }
-    
-    handleChangeInput(event){
-        this.setState({value: event.target.value});
+    handleChangeInput1(event){
+        this.setState({ObjectID: event.target.value});
       }
-
-    handleChangeButton(event) {
-      this.setState({value:null})
+      handleSubmit(event) {
+      this.setState({value:null});
+      this.postData();
+      console.log(this.state);
     }
-
-    componentDidMount(){
-        this.fetchData();
-        console.log(this.state);
-        
-    }
+    /*
     fetchData=()=>{
         let url = ".......";//接口地址
         let formData = new FormData();
@@ -214,24 +373,45 @@ class Deletevalue extends React.Component {
             }
         })
         alert('You have deleted the information: ' + this.state.value);   
-    }
+    }*/
+    postData = ()=> {
+        //
+        let url = "http://2738y998r4.wicp.vip:10557/TrafficSign_API/UpdateItem";//接口地址
+        fetch(url, 
+        {
+		   method: "POST",
+		   mode: "cors",
+           headers: 
+           {
+		    	"Content-Type": "application/x-www-form-urlencoded"
+		   },
+           body:'ObjectID='+this.state.ObjectID
+	  }).then(response=>response.json())
+	    .catch((error)=> {
+	          console.error(error);
+	    });
+    alert('You have deleted the information:\n ' + 
+      '\nObjectID: '+this.state.ObjectID
+      );
+	}
 
     render() {
-      var value = this.state.value;
       return <div>
-          {'value:'}
+          <form onSubmit={this.handleSubmit}>
+        {'ObjectID:'}
               <input 
               type="text" 
-              value={value} 
-              onChange={this.handleChangeInput}
+              value={this.state.ObjectID} 
+              onChange={this.handleChangeInput1}
               placeholder="please input"
               /> 
-              <button onClick={this.handleChangeButton}>确定删除</button>
-              <h4>{value}</h4>
+              <br/>
+              <input type="submit" value="确定删除" />
+              </form>
              </div>;
     }
   }
-
+//<button onClick={this.handleChangeButton}>确定删除</button>
   class HelloMessage extends React.Component {
     constructor(props) {
         super(props);
@@ -243,15 +423,102 @@ class Deletevalue extends React.Component {
       this.setState({value: event.target.value});
     }
     render() {
-      var value = this.state.value;
-      return <div>
-                {'value:'}
-              <input type="text" value={value} onChange={this.handleChange} /> 
-              <h4>{value}</h4>
-             </div>;
+        var value = this.state.value;
+        return <div>
+                  {'value:'}
+                <input type="text" value={value} onChange={this.handleChange} /> 
+                <h4>{value}</h4>
+               </div>;
     }
+   
   }
+//查询点坐标信息
+  class Enquiryvalue extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: null,
+            ObjectID:null,
+            mydatas:
+                [{
+                    No:null,
+                    TypeID:null,
+                    ObjectID:null,
+                    Name:null,
+                    Longitude:null,
+                    Latitude:null,
+                    CreateTime:null,
+                    Location:null,
+                    Remark:null,
+                    Modify_Record:null,
+            }],
+        };
+        //this.handleChangeButton = this.handleChangeButton.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeInput=this.handleChangeInput.bind(this);
+        this.handleChangeInput1=this.handleChangeInput1.bind(this);
+    }
+    
+    handleChangeInput(event){
+        this.setState({value: event.target.value});
+      }
+    handleChangeInput1(event){
+        this.setState({ObjectID: event.target.value});
+      }
+      handleSubmit(event) {
+      this.setState({value:null});
+      this.postData();
+      console.log(this.state);
+    }
+    postData = ()=> {
+        //
+        let url = "https://cricketsbrother.github.io/new.json";//接口地址
+        fetch(url, 
+        {
+		   method: "POST",
+		   mode: "cors",
+           headers: 
+           {
+		    	"Content-Type": "application/x-www-form-urlencoded"
+		   },
+           body:'ObjectID='+this.state.ObjectID
+      }).then(response=>response.json())
+      .then(
+        (res)=>{
+            this.setState({
+               mydatas:
+                {
+                    No:res.No,
+                    TypeID:res.TypeID,
+                    ObjectID:res.ObjectID,
+                    Name:res.Name,
+                    Longitude:res.Longitude,
+                    Latitude:res.Latitude,
+                    CreateTime:res.CreateTime,
+                    Location:res.Location,
+                    Remark:res.Remark,
+                    Modify_Record:res.Modify_Record,
+                },
+            })
+        }
+    );
+    //.catch((error)=> {
+	          //console.error(error);
+        //});
+    alert('the information:\n ' + 
+      'value: '+this.state.value+
+      '\nObjectID: '+this.state.ObjectID
+      );
+	}
+    render() {
+        return (
+            <div>
+  
+            </div>
+        );
+    }
 
+  }
 
 class Clock extends React.Component {
     constructor(props) {
@@ -368,20 +635,28 @@ var Root = function Root() {
             React.createElement(
                 TabPanel,
                 null,
-                "Related to bar",
-                <h1>1234</h1>,
-                <h2>4567</h2>,
+                <Clock />,
                 <Addvalue/>,
             ),
             React.createElement(
                 TabPanel,
                 null,
-                "Related to baz",
+                <Clock />,
                 <Deletevalue/>,
-                <Clock />
                 //<h>{element}</h>,
                 //<UserGist />
-            )
+            ),
+            React.createElement(
+                TabPanel,
+                null,
+                <Clock />,
+            ),
+            React.createElement(
+                TabPanel,
+                null,
+                <Clock />,
+                <Enquiryvalue/>,
+            ),
         )
     );//return React.createElement
 };
