@@ -25,6 +25,7 @@ body {
   margin: 0;
   font-family: "Open Sans", sans-serif;
   line-height: 1;/*行间距*/
+  
 }
 .Root {
   height: 100vh;
@@ -45,6 +46,8 @@ body {
 }
 .TabPanel.is-active {
   display: block;
+  background: url("./1.1.png") no-repeat center center fixed;
+  background-size: cover;
 }
 .Button {
   display: inline-block;
@@ -54,9 +57,10 @@ body {
   border: none;
   cursor: pointer;
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 2rem;
   font-weight: bold;
   color: #fff;
+  
 }
 .Button:focus,
 .Button:hover {
@@ -65,4 +69,48 @@ body {
 }
 .Tab.is-active .Button {
   background: #0091EA;
+}
+
+.mystyle{
+  margin-left: 30%;
+  width: 30%;
+  background-color: rgba(245, 233, 233, 0.5);
+  white-space: pre;
+  text-align: center;
+}
+
+.mystyle1{
+  text-align: center;
+}
+
+.enquirystyle{
+  margin-left: 10%;
+  display: flex;
+}
+
+.enquirystyle1{
+  margin-top: 15%;
+}
+
+.enquirystyle2{
+  margin-top: 5%;
+  -moz-column-count:2; /* Firefox */
+	-webkit-column-count:2; /* Safari and Chrome */
+  column-count:2;
+  text-align: center;
+}
+
+.enquirystyle3{
+  margin-left: 10%;
+  width: 50%;
+  background-color: rgba(245, 233, 233, 0.5);
+}
+
+.enquirystyle4{
+  margin-left: 5%;
+}
+
+.deletestyle{
+  margin-top: 10%;
+  text-align: center;
 }
