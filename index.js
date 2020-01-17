@@ -5,7 +5,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import {Map,Marker,Markers,Text} from 'react-amap';
+import {Map,Marker,Markers,Text,InfoWindow} from 'react-amap';
 import AMap from 'react-amap';
 import 'jquery/src/jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -49,13 +49,30 @@ var zoomvalue = 1000;
 var mylogitude=null;
 var mylatitude=null;
 var myarr=[];
+const btstyle = {
+    position: 'absolute',
+    top: '10px',
+    left: '10px',
+    background: '#fff',
+    padding: '10px'
+}
 
-var change1=2000;
-var change2=3000;
-var change3=1000;
-var isChange1=false;
-var isChange2=false;
-var isChange3=false;
+const ZoomCtrl = (props) => {
+    const map = props.__map__;
+    if (!map) {
+      console.log('组件必须作为 Map 的子组件使用');
+      return;
+    }
+    
+    const zoomIn = () => map.zoomIn();
+    const zoomOut = () => map.zoomOut();
+  
+    return (<div style={btstyle}>
+      <button onClick={zoomIn}>zoom in</button>
+      <button onClick={zoomOut}>zoom out</button>
+    </div>);
+  };
+
 
 //红绿灯
 const hldstyleA = {//红色
@@ -119,6 +136,34 @@ class Getdata0 extends React.Component{
     constructor(props){//构造函数
         super(props)
         this.state={
+            isDelete:false,
+            isModify:false,
+            curVisibleWindow:false,
+            isModified:false,//判断是否更改
+            ISAdd:false,//是否确定增加，即是否post
+            //mylong:null,
+            //mylat:null,
+            
+            modifyTypeID:null,
+            modifyName:null,
+            modifyLongitude:null,
+            modifyLatitude:null,
+            modifyCreateTime:null,
+            modifyLocation:null,
+            modifyRemark:null,
+            
+            showMarkerInfo:{
+                No:null,
+                TypeID:null,
+                ObjectID:null,
+                Name:null,
+                Longitude:null,
+                Latitude:null,
+                CreateTime:null,
+                Location:null,
+                Remark:null,
+                Modify_Record:null,
+            },
             mydatas:[
                 {
                     No:null,
@@ -195,7 +240,17 @@ class Getdata0 extends React.Component{
               click: (e) => {
                 const marker = e.target;
                 marker.render(this.renderMarkerClick);
+                //console.log(this.state.center);
               },
+              rightclick: (e) => {
+                const marker =e.target;
+                marker.render(this.renderMarkerRightClick);
+              },
+              /*
+              mouseup: (e) => {
+                const marker =e.target;
+                marker.render(this.renderMarkerMouseUp);
+              },*/
               /*
               mouseover:(e) => {
                 const marker = e.target;
@@ -207,13 +262,12 @@ class Getdata0 extends React.Component{
               },
               */
         }
-    //this.renderMarker=this.renderMarker.bind(this);
     //路况标识事件
     this.lkmarkerEvents = {
         click: (e) => {
           const marker = e.target;
           marker.render(this.renderLkMarkerClick);
-        },   
+        },
     }
     //红绿灯标识事件
     this.hldmarkerEvents = {
@@ -222,11 +276,99 @@ class Getdata0 extends React.Component{
           marker.render(this.renderHldMarkerClick);
         },   
     }
+    //地图事件
+    this.mapEvents = {
+        rightclick: (e) => {
+            var mylong=e.lnglat.getLng();
+            var mylat=e.lnglat.getLat();
+            this.setState({
+                showMarkerInfo:{
+                    Longitude:mylong,
+                    Latitude:mylat,
+                    TypeID:'',
+                    Name:'',
+                    Location:'',
+                    Remark:'',
+                },
+                modifyLongitude:mylong,
+                modifyLatitude:mylat,
+                modifyTypeID:'',
+                modifyName:'',
+                modifyRemark:'',
+                modifyLocation:'',
+            },()=>{
+                console.log(this.state.showMarkerInfo.Longitude+","+this.state.showMarkerInfo.Latitude);
+                console.log("++"+mylong+","+mylat);
+            });
+            this.setState({
+                ISAdd:true,
+            },()=>{});
+        },
+    }
+    this.closeWindow=this.closeWindow.bind(this);
+    this.renderMarkerClick=this.renderMarkerClick.bind(this);
+    this.renderMarkerRightClick=this.renderMarkerRightClick.bind(this);
+    this.deleteEnable=this.deleteEnable.bind(this);
+    this.closeFunc=this.closeFunc.bind(this);
+    this.closeAdd=this.closeAdd.bind(this);
+    this.sureAdd=this.sureAdd.bind(this);
+    this.handleChange3 = this.handleChange3.bind(this);
+    this.handleChange4 = this.handleChange4.bind(this);
+    this.handleChange5 = this.handleChange5.bind(this);
+    this.handleChange6 = this.handleChange6.bind(this);
+    this.handleChange8 = this.handleChange8.bind(this);
+    this.handleChange9 = this.handleChange9.bind(this);
+    //this.renderMarkerMouseUp=this.renderMarkerMouseUp.bind(this); 
 }
-
+//鼠标右击的修改
+renderMarkerRightClick(extData){
+    this.setState({
+        isModify:true,
+        isModified:false,
+        showMarkerInfo:{
+            Longitude:extData.Longitude,
+            Latitude:extData.Latitude,
+            No:extData.No,
+            TypeID:extData.TypeID,
+            ObjectID:extData.ObjectID,
+            Name:extData.Name,
+            CreateTime:extData.CreateTime,
+            Location:extData.Location,
+            Remark:extData.Remark,
+            Modify_Record:extData.Modify_Record,
+        },
+        modifyTypeID:extData.TypeID,
+        modifyName:extData.Name,
+        modifyLongitude:extData.Longitude,
+        modifyLatitude:extData.Latitude,
+        modifyCreateTime:extData.CreateTime,
+        modifyLocation:extData.Location,
+        modifyRemark:extData.Remark,
+    },()=>{
+        //console.log(this.state.showMarkerInfo);
+    });
+}
+/*
+renderMarkerMouseUp(extData){
+    this.setState({
+        showMarkerInfo:{
+            Longitude:extData.Longitude,
+            Latitude:extData.Latitude,
+            No:extData.No,
+            TypeID:extData.TypeID,
+            ObjectID:extData.ObjectID,
+            Name:extData.Name,
+            CreateTime:extData.CreateTime,
+            Location:extData.Location,
+            Remark:extData.Remark,
+            Modify_Record:extData.Modify_Record,
+        },
+    });
+    console.log("up");
+}*/
 //红绿灯信息
 renderHldMarker(extData){
-    console.log(extData);
+    //console.log(extData);
     if(extData.Lt_Status === 1)
     {
         return <div style={hldstyleA}></div>      
@@ -241,7 +383,7 @@ renderHldMarker(extData){
     }
     
 }
-
+//手动改变红绿灯
 renderHldMarkerClick(extData){
     let url = "http://2738y998r4.wicp.vip:10557/TrafficRoad_API/TrafficLight_Status";//接口地址
     if(extData.Lt_Status === 1)
@@ -298,8 +440,7 @@ renderHldMarkerClick(extData){
 }
 //路况标识信息
     renderLkMarker(extData){
-        console.log(extData);
-
+        //console.log(extData);
         if(extData.rStatus === 1)
         {
             return <div style={lkstyleB}></div>
@@ -363,39 +504,79 @@ renderHldMarkerClick(extData){
     renderMarkerHover(extData){
         return <div style={styleC}></div>
       }
+
+    //鼠标左键单击标识进行查询删除
     renderMarkerClick(extData){
-        //console.log(extData.Longitude);
+        if(this.state.isDelete===true)//是删除
+        {
+            //上传删除信息
+            let url = "http://2738y998r4.wicp.vip:10557/TrafficSign_API/UpdateItem";//接口地址
+            fetch(url, 
+            {
+            method: "POST",
+            mode: "cors",
+            headers: 
+            {
+                    "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body:'ObjectID='+extData.ObjectID
+            }).then(response=>response.json())
+            .catch((error)=> {
+                console.error(error);
+            });
+            //更新标识数量
+            this.fetchData();
+        }
+        else//是查询
+        {
+            this.setState({
+                curVisibleWindow:true,
+                showMarkerInfo:{
+                    Longitude:extData.Longitude,
+                    Latitude:extData.Latitude,
+                    No:extData.No,
+                    TypeID:extData.TypeID,
+                    ObjectID:extData.ObjectID,
+                    Name:extData.Name,
+                    CreateTime:extData.CreateTime,
+                    Location:extData.Location,
+                    Remark:extData.Remark,
+                    Modify_Record:extData.Modify_Record,
+                },
+              });
+        }
         
-        alert("该标识信息为:\n"+
-        "No: "+extData.No+"\n"+
-        "TypeID: "+extData.TypeID+"\n"+
-        "ObjectID: "+extData.ObjectID+"\n"+
-        "Name: "+extData.Name+"\n"+
-        "Longitude: "+extData.Longitude+"\n"+
-        "Latitude: "+extData.Latitude+"\n"+
-        "CreateTime: "+extData.CreateTime+"\n"+
-        "Location: "+extData.Location+"\n"+
-        "Remark: "+extData.Remark+"\n"+
-        "Modify_Record: "+extData.Modify_Record
-        );
     }
-    
       componentDidMount() {
         this.fetchData();
-        this.fetchLkData();
-        this.fetchHldData();
-        
+        //this.fetchLkData();
+        //周期性查询红绿灯状态
+        this.timerID2 = setInterval(
+            () => this.fetchHldData(),
+            5000
+        );
+        //this.fetchHldData();
+        //查询路况状态
         this.timerID = setInterval(
           () => this.fetchLkData(),
           //console.log("hello"),
           //() => this.fetchData(),
           10000
         );
+
+        //周期性改变红绿灯状态
+        this.timerID1 = setInterval(
+            () => this.changeHldData(),
+            10000
+        );
+        //获取当前的地图中心
+        
       }
     
       componentWillUnmount() {
+        clearInterval(this.timerID2);
         clearInterval(this.timerID);
-        
+        clearInterval(this.timerID1);
       }
       
 
@@ -429,6 +610,41 @@ renderHldMarkerClick(extData){
         ).catch(err=>{console.log('errroesaa!')})
         //console.log(this.state.mylukuang);    
     }
+    fetchSingleData = ()=> {
+        //
+        let url = "http://2738y998r4.wicp.vip:10557/TrafficSign_API/GetItem";//接口地址
+        fetch(url, 
+        {
+		   method: "POST",
+		   mode: "cors",
+           headers: 
+           {
+		    	"Content-Type": "application/x-www-form-urlencoded"
+		   },
+           body:'ObjectID='+this.state.ObjectID
+      }).then(response=>response.json())
+      .then(
+        (res)=>{
+            var temp=res[0];
+            this.setState({
+               mydatas:
+                {
+                    No:temp.No,
+                    TypeID:temp.TypeID,
+                    ObjectID:temp.ObjectID,
+                    Name:temp.Name,
+                    Longitude:temp.Longitude,
+                    Latitude:temp.Latitude,
+                    CreateTime:temp.CreateTime,
+                    Location:temp.Location,
+                    Remark:temp.Remark,
+                    Modify_Record:temp.Modify_Record,
+                },
+            })
+        }
+    );
+    console.log("查询成功");
+	}
     fetchHldData=()=>{
         //http://2738y998r4.wicp.vip:10557/TrafficRoad_API/RoadStatus
         //https://cricketsbrother.github.io/lll.json
@@ -442,14 +658,14 @@ renderHldMarkerClick(extData){
                 })
             }
         ).catch(err=>{console.log('errroesaa!')})
-        //console.log(this.state.mylukuang);    
+        //console.log("fetch!");    
     }
     //起初获取全部标识牌信息
     fetchData=()=>{
         //https://cricketsbrother.github.io/new.json
         //https://cricketsbrother.github.io/fk.json
         //http://2738y998r4.wicp.vip:10557/TrafficSign_API/SignBase
-        fetch('http://2738y998r4.wicp.vip:10557/TrafficSign_API/SignBase',{method:"GET"})
+        fetch('https://cricketsbrother.github.io/new.json',{method:"GET"})
         .then(response=>{return response.json()})
         .then(
             (res)=>{
@@ -461,16 +677,177 @@ renderHldMarkerClick(extData){
         ).catch(err=>{console.log('errroesaa!')})
             
     }
+    //周期性改变红绿灯状态
+    changeHldData=()=>{
+        
+        let url = "http://2738y998r4.wicp.vip:10557/TrafficRoad_API/changeStatus";//接口地址
+        fetch(url, 
+            {
+               method: "POST",
+               mode: "cors",
+               headers: 
+               {
+                    "Content-Type": "application/x-www-form-urlencoded"
+               },
+               //body:'Lt_OID='+null+'&Lt_Status='+null
+          }).then(response=>response.json())
+          .then();
+          //console.log("changed");
+    }
+    //关闭信息窗
+    closeWindow(){
+        if(this.state.isModify===true && this.state.isModified===true)//上传修改信息
+        {
+            console.log("上传修改");
+            let url = "http://2738y998r4.wicp.vip:10557/TrafficSign_API/SignItem/-1";//接口地址
+            fetch(url, 
+            {
+                method: "POST",
+                mode: "cors",
+                headers: 
+                {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body:
+                'No='+this.state.showMarkerInfo.No+
+                '&TypeID='+this.state.modifyTypeID+
+                '&ObjectID='+this.state.showMarkerInfo.ObjectID+
+                '&Name='+this.state.modifyName+
+                '&Longitude='+this.state.modifyLongitude+
+                '&Latitude='+this.state.modifyLatitude+
+                '&CreateTime='+this.state.showMarkerInfo.CreateTime+
+                '&Location='+this.state.modifyLocation+
+                '&Remark='+this.state.modifyRemark+
+                '&Modify_Record='+this.state.showMarkerInfo.Modify_Record
+                }).then(response=>response.json())
+            .catch((error)=> {
+                    console.error(error);
+            });
+            console.log("修改成功");
+            //更新修改信息
+            this.fetchData();
+        }
+        //关闭信息窗口
+        this.setState({
+          curVisibleWindow: false,
+          isModify:false,
+          isModified:false,
+          ISAdd:false,
+        });
+      }
+    //使删除有效
+    deleteEnable(){
+        this.setState({
+            isDelete:true,
+        },()=>{
+            console.log(this.state.isDelete);
+        })
+    }
+    //关闭除查询外的所有功能
+    closeFunc(){
+        this.setState({
+            isDelete:false,
+        },()=>{
+            console.log(this.state.isDelete);
+        })
+    }
+    //关闭增加标志的信息框
+    closeAdd(){
+        this.setState({
+            ISAdd:false,
+            modifyTypeID:null,
+            modifyName:null,
+            modifyLongitude:null,
+            modifyLatitude:null,
+            modifyLocation:null,
+            modifyRemark:null,
+        },()=>{});
+    }
+    //关闭增加标志的信息框，并且上传增加信息
+    sureAdd(){
+        let url = "http://2738y998r4.wicp.vip:10557/TrafficSign_API/SignBase";//接口地址
+            fetch(url, 
+            {
+                method: "POST",
+                mode: "cors",
+                headers: 
+                {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body:
+                'TypeID='+this.state.modifyTypeID+
+                '&Name='+this.state.modifyName+
+                '&Longitude='+this.state.modifyLongitude+
+                '&Latitude='+this.state.modifyLatitude+
+                '&Location='+this.state.modifyLocation+
+                '&Remark='+this.state.modifyRemark
+                }).then(response=>response.json())
+            .catch((error)=> {
+                    console.error(error);
+            });
+        this.setState({
+            ISAdd:false,
+            modifyTypeID:null,
+            modifyName:null,
+            modifyLongitude:null,
+            modifyLatitude:null,
+            modifyLocation:null,
+            modifyRemark:null,
+        },()=>{});
+        this.fetchData();
+    }
+    //修改框
+    handleChange3(event) {
+        this.setState({
+            isModified:true,
+            modifyTypeID:event.target.value,
+        },()=>{});
+      }
+    handleChange4(event) {
+        this.setState({
+            isModified:true,
+            modifyName:event.target.value,
+        },()=>{});
+      }
+      handleChange5(event) {
+        this.setState({
+            isModified:true,
+            modifyLongitude:event.target.value,
+        },()=>{});
+      }
+      handleChange6(event) {
+        this.setState({
+            isModified:true,
+            modifyLatitude:event.target.value,
+        },()=>{});
+      }
+      handleChange8(event) {
+        this.setState({
+            isModified:true,
+            modifyLocation:event.target.value,
+        },()=>{});
+      }
+      handleChange9(event) {
+        this.setState({
+            isModified:true,
+            modifyRemark:event.target.value,
+        },()=>{});
+      }
+
     render()
     {
-        const{mydatas,mysigns,mylukuang,myhonglvdeng}=this.state;
+        const{mydatas,mysigns,mylukuang,myhonglvdeng,showMarkerInfo}=this.state;
         return(
             <Map 
                 amapkey ={'1bb9ee64ab614ea1523647c2df308ab0'}
                 zoom= {zoomvalue}//原始地图缩放
                 //zoomEnable={false}//不支持手动缩放
                 center={[103.98913620876736,30.76766140407926]}//设置初始中心坐标
-                >
+                plugins={['Scale','ToolBar','MapType','OverView']}
+                resizeEnable= {true}
+                events={this.mapEvents}
+            >
+            
             
             {mydatas.map(mydata=>(
 
@@ -500,7 +877,96 @@ renderHldMarkerClick(extData){
             extData={hld}
             /> ))}
 
+            <InfoWindow
+            position={[showMarkerInfo.Longitude,showMarkerInfo.Latitude]}
+            visible={this.state.curVisibleWindow}
+            isCustom
+            >
+            <div>
+            <h3 className="mystyle1">标志信息</h3>
+            <p>序号: {showMarkerInfo.No}</p>
+            <p>类型: {showMarkerInfo.TypeID}</p>
+            <p>标志码: {showMarkerInfo.ObjectID}</p>
+            <p>标识名称: {showMarkerInfo.Name}</p>
+            <p>经度: {showMarkerInfo.Longitude}</p>
+            <p>维度: {showMarkerInfo.Latitude}</p>
+            <p>所在路段: {showMarkerInfo.Location}</p>
+            <p>创建日期: {showMarkerInfo.CreateTime}</p>
+            <p>备注: {showMarkerInfo.Remark}</p>
+            <p>修改记录: {showMarkerInfo.Modify_Record}</p>
+            <div className="mystyle1">
+            <button className="btn btn-primary" onClick={() => {this.closeWindow()}}>关闭</button>
+            </div>
+            </div>
+          </InfoWindow>
 
+          <InfoWindow
+            position={[showMarkerInfo.Longitude,showMarkerInfo.Latitude]}
+            visible={this.state.isModify}
+            isCustom={false}
+          >
+            <div className="mapInfo1">
+            <h3 className="mystyle1">标志修改</h3>
+            <span className="glyphicon glyphicon-edit">{"标志类型 "}</span>
+              <input type="text" defaultValue={this.state.showMarkerInfo.TypeID} onChange={this.handleChange3} className="input input-sm"/> 
+              <br />
+            <span className="glyphicon glyphicon-edit">{"标识名称 "}</span>
+              <input type="text" defaultValue={this.state.showMarkerInfo.Name} onChange={this.handleChange4} className="input input-sm"/> 
+              <br />
+        <span className="glyphicon glyphicon-edit">{"经度   "}</span>
+              <input type="text" defaultValue={this.state.showMarkerInfo.Longitude} onChange={this.handleChange5} className="input input-sm"/>
+              <br /> 
+        <span className="glyphicon glyphicon-edit">{"维度   "}</span>
+              <input type="text" defaultValue={this.state.showMarkerInfo.Latitude} onChange={this.handleChange6} className="input input-sm"/> 
+              <br />
+        <span className="glyphicon glyphicon-edit">{"所在路段 "}</span>
+              <input type="text" defaultValue={this.state.showMarkerInfo.Location} onChange={this.handleChange8} className="input input-sm"/> 
+              <br />
+        <span className="glyphicon glyphicon-edit">{"备注   "}</span>
+              <input type="text" defaultValue={this.state.showMarkerInfo.Remark} onChange={this.handleChange9} className="input input-sm"/> 
+              <br />
+            <div className="mystyle1">
+            <button className="btn btn-primary" onClick={() => {this.closeWindow()}}>确定修改</button>
+            </div>
+            </div>
+          </InfoWindow>
+
+          <InfoWindow
+            position={[showMarkerInfo.Longitude,showMarkerInfo.Latitude]}
+            visible={this.state.ISAdd}
+            isCustom={false}
+          >
+            <div className="mapInfo1">
+            <h3 className="mystyle1">标志增加</h3>
+        <span className="glyphicon glyphicon-edit">{"标志类型 "}</span>
+              <input type="text" defaultValue={""} onChange={this.handleChange3} className="input input-sm"/> 
+              <br />
+        <span className="glyphicon glyphicon-edit">{"标识名称 "}</span>
+              <input type="text" defaultValue={""} onChange={this.handleChange4} className="input input-sm"/> 
+              <br />
+        <span className="glyphicon glyphicon-edit">{"经度   "}</span>
+              <input type="text" defaultValue={this.state.showMarkerInfo.Longitude} onChange={this.handleChange5} className="input input-sm"/>
+              <br /> 
+        <span className="glyphicon glyphicon-edit">{"维度   "}</span>
+              <input type="text" defaultValue={this.state.showMarkerInfo.Latitude} onChange={this.handleChange6} className="input input-sm"/> 
+              <br />
+        <span className="glyphicon glyphicon-edit">{"所在路段 "}</span>
+              <input type="text" defaultValue={""} onChange={this.handleChange8} className="input input-sm"/> 
+              <br />
+        <span className="glyphicon glyphicon-edit">{"备注   "}</span>
+              <input type="text" defaultValue={""} onChange={this.handleChange9} className="input input-sm"/> 
+              <br />
+            <div className="mystyle1">
+            <button className="btn btn-primary" onClick={this.sureAdd}>确定增加</button>
+            <button className="btn btn-primary" onClick={this.closeAdd}>关闭</button>
+            </div>
+            </div>
+          </InfoWindow>
+          
+          <div style={btstyle}>
+            <button onClick={this.deleteEnable}>删除</button>
+            <button onClick={this.closeFunc}>关闭功能</button>
+        </div>
             </Map>
         )
     }
@@ -676,9 +1142,8 @@ class Addvalue extends React.Component {
             <br />
             <br />
       <span className="glyphicon glyphicon-pencil">{"Modify_Record:"}</span>
-            <input type="text" value={this.state.Modify_Record} onChange={this.handleChange10} className="input input-sm"/> 
-            <br />
-            <br />
+            <input type="text" value={this.state.Modify_Record} onChange={this.handleChange10} className="input input-sm"/>
+            <br /> 
           <input type="submit" className="btn btn-primary" value="确定增加" />
         </form>
          <br/>
@@ -1204,7 +1669,7 @@ var Root = function Root() {
                     React.createElement(
                         Button,
                         null,
-                        "Map"
+                        "地图"
                     )
                 ),
                 React.createElement(
@@ -1213,7 +1678,7 @@ var Root = function Root() {
                     React.createElement(
                         Button,
                         null,
-                        "Add"
+                        "添加"
                     )
                 ),
                 React.createElement(
@@ -1222,7 +1687,7 @@ var Root = function Root() {
                     React.createElement(
                         Button,
                         null,
-                        "Delete"
+                        "删除"
                     )
                 ),
                 React.createElement(
@@ -1231,7 +1696,7 @@ var Root = function Root() {
                     React.createElement(
                         Button,
                         null,
-                        "Modify"
+                        "修改"
                     )
                 ),
                 React.createElement(
@@ -1240,7 +1705,7 @@ var Root = function Root() {
                     React.createElement(
                         Button,
                         null,
-                        "Enquiry"
+                        "查询"
                     )
                 )
             ),// React.createElement:TabList
