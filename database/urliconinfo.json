@@ -1,0 +1,39 @@
+{
+    "RECORDS": [
+        {
+            "trafficIcon_ID": "A10010001",
+            "trafficIcon_Name": "限速30",
+            "trafficIcon_URL": "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=653931510,1073465278&fm=26&gp=0.jpg"
+        },
+        {
+            "trafficIcon_ID": "A10010002",
+            "trafficIcon_Name": "禁止临时或长时停车",
+            "trafficIcon_URL": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572780880058&di=44cf5039415ed7b33ac585de01e0f73e&imgtype=0&src=http%3A%2F%2Fwww.esafety.cn%2Fblog%2FUploadFiles%2F2009-6%2F291120711385.gif"
+        },
+        {
+            "trafficIcon_ID": "A10010003",
+            "trafficIcon_Name": "禁止鸣喇叭",
+            "trafficIcon_URL": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572780355532&di=35e86e3ae64fafa993ea67901f23ad66&imgtype=0&src=http%3A%2F%2Fs8.sinaimg.cn%2Fmiddle%2F70bd731cx970979802fb7%26690"
+        },
+        {
+            "trafficIcon_ID": "A10010004",
+            "trafficIcon_Name": "限速20",
+            "trafficIcon_URL": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1573374661&di=734ada8f5e8390afb4943587b7a80403&imgtype=jpg&er=1&src=http%3A%2F%2Fs9.rr.itc.cn%2Fr%2FwapChange%2F20166_29_15%2Fa3orrs2623359378352.jpg"
+        },
+        {
+            "trafficIcon_ID": "A10010005",
+            "trafficIcon_Name": "限时禁止驶入",
+            "trafficIcon_URL": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572780211803&di=e92fc6f358947e788191eb34b4c877df&imgtype=0&src=http%3A%2F%2Fn.sinaimg.cn%2Fsc%2Ftransform%2F20161217%2FqWXX-fxytqav9679656.jpg"
+        },
+        {
+            "trafficIcon_ID": "C10030001",
+            "trafficIcon_Name": "请顺向停车",
+            "trafficIcon_URL": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572780279769&di=4dd0434772891b66e70bb013fb4a9761&imgtype=0&src=http%3A%2F%2Fimg58.nipic.com%2Ffile%2F20140910%2F9456975_113235617000_1.jpg"
+        },
+        {
+            "trafficIcon_ID": "D10040001",
+            "trafficIcon_Name": "停车场",
+            "trafficIcon_URL": ""
+        }
+    ]
+}

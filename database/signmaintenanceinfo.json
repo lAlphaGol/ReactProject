@@ -1,0 +1,25 @@
+{
+    "RECORDS": [
+        {
+            "sign_OID": "10010001",
+            "maintenance_Time": "21/2/2020 15:35:28",
+            "maintenance_Company": "蓝翔科技有限公司",
+            "maintenance_Content": "标志牌维修",
+            "maintenance_Staff": "工程部-张三"
+        },
+        {
+            "sign_OID": "10010002",
+            "maintenance_Time": "21/2/2020 15:36:00",
+            "maintenance_Company": "兰斯科技有限公司",
+            "maintenance_Content": "刷漆",
+            "maintenance_Staff": "后勤部-李四"
+        },
+        {
+            "sign_OID": "10010001",
+            "maintenance_Time": "23/2/2020 11:40:17",
+            "maintenance_Company": "蓝天科技有限公司",
+            "maintenance_Content": "维护",
+            "maintenance_Staff": ""
+        }
+    ]
+}

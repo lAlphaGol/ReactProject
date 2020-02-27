@@ -1,0 +1,31 @@
+{
+    "RECORDS": [
+        {
+            "Lt_OID": "30010001",
+            "Lt_Name": "知行路",
+            "Lt_No": "1",
+            "Lt_Longitude": "103.98923620876736",
+            "Lt_Latitude": "30.7676140407986",
+            "Lt_Status": "2",
+            "Lt_beginTime": "6/2/2020 21:25:00"
+        },
+        {
+            "Lt_OID": "30010002",
+            "Lt_Name": "知行路红路灯",
+            "Lt_No": "2",
+            "Lt_Longitude": "103.98488715277777",
+            "Lt_Latitude": "30.7639993326822916",
+            "Lt_Status": "2",
+            "Lt_beginTime": "6/2/2020 21:25:00"
+        },
+        {
+            "Lt_OID": "30010003",
+            "Lt_Name": "红绿灯",
+            "Lt_No": "3",
+            "Lt_Longitude": "103.97875189887152",
+            "Lt_Latitude": "30.765809461805556",
+            "Lt_Status": "2",
+            "Lt_beginTime": "6/2/2020 21:25:00"
+        }
+    ]
+}
